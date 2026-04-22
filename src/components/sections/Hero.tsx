@@ -13,16 +13,20 @@ import {
   Diamond, 
   Users, 
   LayoutGrid,
-  SearchCode
+  SearchCode,
+  Menu,
+  X
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const Navbar = () => {
+  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+
   return (
-    <nav className="flex items-center justify-between px-6 lg:px-16 py-8 bg-transparent max-w-screen-2xl mx-auto relative z-50">
+    <nav className="flex items-center justify-between px-6 lg:px-16 py-6 lg:py-8 bg-transparent max-w-screen-2xl mx-auto relative z-[100]">
       {/* Logo */}
-      <div className="flex items-center gap-4 group cursor-pointer">
-        <div className="relative w-12 h-12 flex items-center justify-center">
+      <div className="flex items-center gap-3 lg:gap-4 group cursor-pointer">
+        <div className="relative w-10 h-10 lg:w-12 lg:h-12 flex items-center justify-center">
           <Image 
             src="/images/logo.png" 
             alt="Logo" 
@@ -30,41 +34,68 @@ const Navbar = () => {
             height={48}
             className="object-contain rounded-xl"
           />
-          <div className="absolute -top-1 -right-1 w-3 h-3 bg-primary rounded-full animate-pulse" />
+          <div className="absolute -top-1 -right-1 w-2.5 h-2.5 lg:w-3 lg:h-3 bg-primary rounded-full animate-pulse" />
         </div>
         <div className="flex flex-col justify-center">
-          <span className="text-2xl font-black text-primary tracking-tighter leading-none">WARPTEX</span>
-          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-1">Trusted Manufacturer</span>
+          <span className="text-xl lg:text-2xl font-black text-primary tracking-tighter leading-none">WARPTEX</span>
+          <span className="text-[8px] lg:text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-1">Trusted Manufacturer</span>
         </div>
       </div>
 
-      {/* Navigation Links */}
-      <div className="hidden md:flex items-center gap-12">
+      {/* Desktop Navigation Links */}
+      <div className="hidden md:flex items-center gap-8 lg:gap-12">
         <div className="relative group">
-          <a href="#" className="text-[15px] font-bold text-slate-900">Home</a>
+          <a href="#" className="text-[14px] lg:text-[15px] font-bold text-slate-900">Home</a>
           <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-primary rounded-full" />
         </div>
-        <a href="#" className="text-[15px] font-bold text-slate-400 hover:text-slate-900 transition-all duration-300">About Us</a>
-        <a href="#" className="text-[15px] font-bold text-slate-400 hover:text-slate-900 transition-all duration-300">Our Services</a>
+        <a href="#" className="text-[14px] lg:text-[15px] font-bold text-slate-400 hover:text-slate-900 transition-all duration-300">About Us</a>
+        <a href="#" className="text-[14px] lg:text-[15px] font-bold text-slate-400 hover:text-slate-900 transition-all duration-300">Our Services</a>
       </div>
 
-      {/* Icons */}
-      <div className="flex items-center gap-8 text-slate-400">
-        <Search className="w-5 h-5 cursor-pointer hover:text-slate-900 transition-colors" />
-        <CircleDollarSign className="w-5 h-5 cursor-pointer hover:text-slate-900 transition-colors" />
-        <CloudUpload className="w-5 h-5 cursor-pointer hover:text-slate-900 transition-colors" />
-        <Bell className="w-5 h-5 cursor-pointer hover:text-slate-900 transition-colors" />
-        <div className="w-10 h-10 rounded-full border-2 border-slate-100 flex items-center justify-center cursor-pointer hover:border-slate-300 hover:bg-slate-50 transition-all">
+      {/* Icons & Mobile Menu Toggle */}
+      <div className="flex items-center gap-4 lg:gap-8 text-slate-400">
+        <div className="hidden sm:flex items-center gap-4 lg:gap-8">
+          <Search className="w-5 h-5 cursor-pointer hover:text-slate-900 transition-colors" />
+          <CircleDollarSign className="w-5 h-5 cursor-pointer hover:text-slate-900 transition-colors" />
+          <CloudUpload className="w-5 h-5 cursor-pointer hover:text-slate-900 transition-colors" />
+          <Bell className="w-5 h-5 cursor-pointer hover:text-slate-900 transition-colors" />
+        </div>
+        
+        <div className="w-9 h-9 lg:w-10 lg:h-10 rounded-full border-2 border-slate-100 flex items-center justify-center cursor-pointer hover:border-slate-300 hover:bg-slate-50 transition-all">
           <User className="w-5 h-5 text-slate-900" />
         </div>
+
+        <button 
+          className="md:hidden p-2 text-slate-900"
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+        >
+          {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        </button>
       </div>
+
+      {/* Mobile Menu Overlay */}
+      {isMenuOpen && (
+        <div className="fixed inset-0 bg-white z-[90] md:hidden pt-24 px-6">
+          <div className="flex flex-col gap-6 items-center text-center">
+            <a href="#" className="text-2xl font-bold text-slate-900" onClick={() => setIsMenuOpen(false)}>Home</a>
+            <a href="#" className="text-2xl font-bold text-slate-400" onClick={() => setIsMenuOpen(false)}>About Us</a>
+            <a href="#" className="text-2xl font-bold text-slate-400" onClick={() => setIsMenuOpen(false)}>Our Services</a>
+            <div className="flex gap-8 mt-8">
+              <Search className="w-6 h-6" />
+              <CircleDollarSign className="w-6 h-6" />
+              <CloudUpload className="w-6 h-6" />
+              <Bell className="w-6 h-6" />
+            </div>
+          </div>
+        </div>
+      )}
     </nav>
   );
 };
 
 const ScrollingColumn = ({ images, duration, reverse = false }: { images: string[], duration: number, reverse?: boolean }) => {
   return (
-    <div className="relative h-[800px] overflow-hidden w-full">
+    <div className="relative h-[400px] sm:h-[600px] lg:h-[800px] overflow-hidden w-full">
       <motion.div
         animate={{
           y: reverse ? ["-50%", "0%"] : ["0%", "-50%"]
@@ -74,19 +105,19 @@ const ScrollingColumn = ({ images, duration, reverse = false }: { images: string
           repeat: Infinity,
           ease: "linear",
         }}
-        className="flex flex-col gap-6 w-full"
+        className="flex flex-col gap-4 lg:gap-6 w-full"
       >
         {[...images, ...images].map((src, index) => (
           <div 
             key={index}
-            className="relative w-full aspect-[3/4] rounded-[2.5rem] overflow-hidden shadow-xl"
+            className="relative w-full aspect-[3/4] rounded-[1.5rem] lg:rounded-[2.5rem] overflow-hidden shadow-xl"
           >
             <Image 
               src={src} 
               alt={`Scrolling image ${index}`} 
               fill 
               className="object-cover"
-              sizes="(max-width: 768px) 100vw, 33vw"
+              sizes="(max-width: 768px) 33vw, 20vw"
             />
           </div>
         ))}
@@ -117,17 +148,17 @@ export default function Hero() {
       <Navbar />
       
       <div className="max-w-screen-2xl mx-auto px-6 lg:px-16 flex flex-col min-h-[calc(100vh-100px)] relative">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center flex-1 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-12 items-center flex-1 relative z-10 py-10 lg:py-0">
           {/* Left Content */}
-          <div className="relative z-20">
+          <div className="relative z-20 text-center lg:text-left flex flex-col items-center lg:items-start">
             <motion.div 
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
-              className="space-y-12"
+              className="space-y-8 lg:space-y-12"
             >
               <div className="relative inline-block">
-                <h1 className="text-6xl lg:text-[90px] font-black text-slate-900 leading-[0.95] tracking-tight">
+                <h1 className="text-5xl sm:text-6xl lg:text-[90px] font-black text-slate-900 leading-[0.95] tracking-tight">
                   Welcome <br />
                   to <span className="text-primary relative">
                     WARPTEX
@@ -135,7 +166,7 @@ export default function Hero() {
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
                       transition={{ delay: 0.8, type: "spring", stiffness: 200 }}
-                      className="absolute -top-4 -right-12"
+                      className="absolute -top-4 -right-12 hidden sm:block"
                     >
                       <Play className="w-12 h-12 fill-blue-100 text-blue-100" />
                     </motion.span>
@@ -143,37 +174,38 @@ export default function Hero() {
                 </h1>
               </div>
 
-              <div className="flex items-start gap-4 text-slate-500 max-w-md">
-                <p className="text-xl font-medium leading-relaxed">
-                  Your Trusted Manufacturer and <br />
+              <div className="flex flex-col lg:flex-row items-center lg:items-start gap-4 text-slate-500 max-w-md mx-auto lg:mx-0">
+                <p className="text-lg lg:text-xl font-medium leading-relaxed">
+                  Your Trusted Manufacturer and <br className="hidden sm:block" />
                   Exporter of High-Quality Goods
                 </p>
                 <motion.div
                   animate={{ y: [0, -10, 0] }}
                   transition={{ repeat: Infinity, duration: 3 }}
+                  className="hidden lg:block"
                 >
                   <Diamond className="w-6 h-6 text-primary mt-2" />
                 </motion.div>
               </div>
 
-              <Button className="bg-primary hover:opacity-90 hover:scale-105 hover:shadow-2xl hover:shadow-primary/30 text-primary-foreground px-12 py-8 text-xl font-bold rounded-[2.2rem] transition-all duration-300 border-none">
+              <Button className="bg-primary hover:opacity-90 hover:scale-105 hover:shadow-2xl hover:shadow-primary/30 text-primary-foreground px-8 lg:px-12 py-6 lg:py-8 text-lg lg:text-xl font-bold rounded-[1.5rem] lg:rounded-[2.2rem] transition-all duration-300 border-none">
                 Get Started
               </Button>
             </motion.div>
           </div>
 
           {/* Right Content - Wrapped in overflow-hidden container to clip rotated images */}
-          <div className="relative h-full flex items-center justify-end pointer-events-none overflow-hidden">
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-100/40 blur-[120px] rounded-full z-0" />
+          <div className="relative h-[400px] sm:h-[600px] lg:h-full flex items-center justify-center lg:justify-end pointer-events-none overflow-hidden">
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] sm:w-[600px] h-[300px] sm:h-[600px] bg-blue-100/40 blur-[80px] lg:blur-[120px] rounded-full z-0" />
             
-            <div className="grid grid-cols-3 gap-6 w-full max-w-[650px] relative z-10 rotate-[-5deg] scale-110 origin-center">
-              <div className="pt-20">
+            <div className="grid grid-cols-3 gap-3 lg:gap-6 w-full max-w-[300px] sm:max-w-[500px] lg:max-w-[650px] relative z-10 rotate-[-5deg] scale-125 lg:scale-110 origin-center">
+              <div className="pt-10 lg:pt-20">
                 <ScrollingColumn images={col1} duration={20} />
               </div>
-              <div className="pb-20">
+              <div className="pb-10 lg:pb-20">
                 <ScrollingColumn images={col2} duration={25} reverse={true} />
               </div>
-              <div className="pt-20">
+              <div className="pt-10 lg:pt-20">
                 <ScrollingColumn images={col3} duration={18} />
               </div>
             </div>
@@ -181,7 +213,7 @@ export default function Hero() {
             {/* Stronger Edge Fading to hide image edges */}
             <div className="absolute inset-0 bg-gradient-to-t from-[#F8F9FB] via-transparent to-[#F8F9FB] z-20" />
             <div className="absolute inset-0 bg-gradient-to-r from-[#F8F9FB] via-transparent to-[#F8F9FB] z-20" />
-            <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-[#F8F9FB] to-transparent z-20" />
+            <div className="absolute inset-y-0 left-0 w-16 lg:w-32 bg-gradient-to-r from-[#F8F9FB] to-transparent z-20" />
           </div>
         </div>
 
@@ -190,7 +222,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 1 }}
-          className="pb-16 pt-8 flex flex-wrap items-center justify-between gap-12 relative z-50 bg-[#F8F9FB]/80 backdrop-blur-sm lg:bg-transparent"
+          className="pb-16 lg:pb-16 pt-8 flex flex-wrap items-center justify-center lg:justify-between gap-8 lg:gap-12 relative z-50 bg-[#F8F9FB]/80 backdrop-blur-sm lg:bg-transparent"
         >
           <StatItem 
             icon={Users} 
